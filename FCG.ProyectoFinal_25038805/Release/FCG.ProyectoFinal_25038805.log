@@ -1,0 +1,27 @@
+﻿  Main.cpp
+Main.cpp(11): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+Main.cpp(77): warning C4800: 'const int': forzando el valor a bool 'true' o 'false' (advertencia de rendimiento)
+Main.cpp(91): warning C4800: 'const int': forzando el valor a bool 'true' o 'false' (advertencia de rendimiento)
+Main.cpp(166): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+Main.cpp(168): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+Main.cpp(169): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+Main.cpp(176): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+Main.cpp(177): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+Main.cpp(182): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+Main.cpp(183): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+Main.cpp(184): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+Main.cpp(185): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+Main.cpp(229): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+libSOIL.lib(SOIL.obj) : warning LNK4075: se omite '/EDITANDCONTINUE' debido a la especificación '/OPT:ICF'
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRTD' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
+  Generando código
+  3 of 948 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+  Generación de código finalizada
+    0 functions were new in current compilation
+    4 functions had inline decision re-evaluated but remain unchanged
+libSOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc120.pdb' con 'libSOIL.lib(image_DXT.obj)' o en 'C:\Users\José Manuel\documents\visual studio 2015\Projects\FCG.ProyectoFinal_25038805\Release\vc120.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+libSOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc120.pdb' con 'libSOIL.lib(image_helper.obj)' o en 'C:\Users\José Manuel\documents\visual studio 2015\Projects\FCG.ProyectoFinal_25038805\Release\vc120.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+libSOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB 'vc120.pdb' con 'libSOIL.lib(SOIL.obj)' o en 'C:\Users\José Manuel\documents\visual studio 2015\Projects\FCG.ProyectoFinal_25038805\Release\vc120.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+libSOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc120.pdb' con 'libSOIL.lib(stb_image_aug.obj)' o en 'C:\Users\José Manuel\documents\visual studio 2015\Projects\FCG.ProyectoFinal_25038805\Release\vc120.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+  FCG.ProyectoFinal_25038805.vcxproj -> C:\Users\José Manuel\documents\visual studio 2015\Projects\FCG.ProyectoFinal_25038805\Release\FCG.ProyectoFinal_25038805.exe
+  FCG.ProyectoFinal_25038805.vcxproj -> C:\Users\José Manuel\documents\visual studio 2015\Projects\FCG.ProyectoFinal_25038805\Release\FCG.ProyectoFinal_25038805.pdb (Full PDB)

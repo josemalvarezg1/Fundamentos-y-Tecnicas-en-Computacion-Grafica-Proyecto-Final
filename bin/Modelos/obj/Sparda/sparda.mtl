@@ -1,0 +1,67 @@
+# Blender MTL File: 'sparda.blend'
+# Material Count: 6
+
+newmtl m_Sparda01_fres
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd t_spardaBody01_d.tga
+map_Disp t_spardaBody01_n.tga
+
+newmtl m_Sparda02a_fres
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd t_SecretStatueBig2_d.tga
+map_Disp t_SecretStatueBig2_n.tga
+
+newmtl m_Sparda03
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd t_SecretStatueSmall_d.tga
+map_Disp t_SecretStatueSmall_n.tga
+
+newmtl m_Sparda04
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd t_SpardaBuild01_dm.tga
+map_Disp t_SpardaBuild01_n.tga
+
+newmtl m_Sparda05
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd t_spardabits_dm.tga
+
+newmtl m_Sparda07
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd t_SpardaShackles01_dm.tga
+map_Disp t_SpardaShackles01_n.tga

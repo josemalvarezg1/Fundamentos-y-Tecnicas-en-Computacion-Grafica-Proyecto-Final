@@ -2,7 +2,7 @@
 
 #define cantSpheres 3
 #define cantTriangles 2
-//Piramide comentada #define cantTriangles 8
+//Piramide comentada #define cantTriangles 6
 
 uniform sampler2D texture;
 uniform bool isLight;
@@ -47,6 +47,7 @@ struct Triangle {
     vec3 v1;
     vec3 v2;  
     vec3 v3;
+    vec3 normal;
     vec4 color;
 };
     
@@ -66,7 +67,6 @@ float interesectRayBox(vec3 origin, vec3 direction,vec3 minBox,vec3 maxBox, out 
 float intersectRaySphere(Ray ray, Sphere sphere, out vec3 posHit_out, out vec3 normal);
 float intersectRayTriangle(Triangle tri, Ray ray, out vec3 posHit_out);
 vec3 blinnPhong(Light light, vec3 normales, vec3 posHit_out, vec4 color, Ray ray);
-vec3 getTriangleNormal(Triangle t1, Triangle t2);
 vec3 getBoxNormal(vec3 min, vec3 max, vec3 hit);
 vec4 reflection(vec3 origin, vec3 direction, vec3 norm, Light light);
 vec4 secondReflection(vec3 origin, vec3 direction, vec3 norm, Light light);
@@ -182,42 +182,6 @@ vec3 blinnPhong(Light light, vec3 normales, vec3 posHit_out, vec4 color, Ray ray
 
 }
 
-vec3 getTriangleNormal(Triangle t1, Triangle t2) {
-
-    vec3 U = t1.v2 - t1.v1;
-    vec3 V = t1.v3 - t1.v1;
-
-    vec3 normal = vec3(0.0, 0.0, 0.0);
-    normal.x = (U.y * V.z) - (U.z - V.y);
-    normal.y = (U.z * V.x) - (U.x - V.z);
-    normal.z = (U.x * V.y) - (U.y - V.x);
-
-    U = t2.v2 - t2.v1;
-    V = t2.v3 - t2.v1;
-
-    vec3 normal2 = vec3(0.0, 0.0, 0.0);
-    normal2.x = (U.y * V.z) - (U.z - V.y);
-    normal2.y = (U.z * V.x) - (U.x - V.z);
-    normal2.z = (U.x * V.y) - (U.y - V.x);
-    return vec3((normal.x + normal2.x)/2.0, (normal.y + normal2.y)/2.0, (normal.z + normal2.z)/2.0);
-
-}
-
-vec3 getTriangleNormal2(Triangle t1) {
-
-    vec3 U = t1.v2 - t1.v1;
-    vec3 V = t1.v3 - t1.v1;
-
-    vec3 normal = vec3(0.0, 0.0, 0.0);
-    normal.x = (U.y * V.z) - (U.z - V.y);
-    normal.y = (U.z * V.x) - (U.x - V.z);
-    normal.z = (U.x * V.y) - (U.y - V.x);
-
-    return normal;
-
-}
-
-
 vec3 getBoxNormal(vec3 min, vec3 max, vec3 hit) {
 
 	vec3 c = (min + max) * 0.5;
@@ -248,7 +212,7 @@ vec4 reflection(vec3 origin, vec3 direction, vec3 norm, Light light) {
     	//Se crea la sombra a partir de otro rayo
         vec3 dirShadow = normalize(light.position - posHit_out); 
         Ray shadow = Ray(posHit_out, dirShadow);
-        vec3 colorShadow = generateShadows(shadow, 12);
+        vec3 colorShadow = generateShadows(shadow, 10);
         if (colorShadow.r > 0.0) colorOut = vec4(colorShadow,1.0); 
 
     }
@@ -268,7 +232,7 @@ vec4 reflection(vec3 origin, vec3 direction, vec3 norm, Light light) {
             //Se crea la sombra a partir de otro rayo
             vec3 dirShadow = normalize(light.position - posHit_out); 
             Ray shadow = Ray(posHit_out, dirShadow);
-            vec3 colorShadow = generateShadows(shadow, i+9);
+            vec3 colorShadow = generateShadows(shadow, i+7);
             if (colorShadow.r > 0.0) color += vec4(colorShadow,1.0);
         
         }
@@ -282,14 +246,7 @@ vec4 reflection(vec3 origin, vec3 direction, vec3 norm, Light light) {
         if (t >= 0.0 && t < minDistance) {
 
         	minDistance = t;
-            vec3 tNormal = vec3(1.0, 1.0, 1.0);
-            if (i < 2) {
-
-	            if (i%2 == 0) tNormal = getTriangleNormal(triangles[i], triangles[i+1]);
-	            else tNormal = getTriangleNormal(triangles[i-1], triangles[i]);
-	            color = vec4(blinnPhong(light, tNormal, posHit_out, triangles[i].color, ray), 1.0);
-
-        	} else color = vec4(1.0, 0.0, 1.0, 1.0);
+	        color = vec4(blinnPhong(light, triangles[i].normal, posHit_out, triangles[i].color, ray), 1.0);
 
             //Se crea la sombra a partir de otro rayo
             vec3 dirShadow = normalize(light.position - posHit_out); 
@@ -325,7 +282,7 @@ vec4 secondReflection(vec3 origin, vec3 direction, vec3 norm, Light light) {
     	//Se crea la sombra a partir de otro rayo
         vec3 dirShadow = normalize(light.position - posHit_out); 
         Ray shadow = Ray(posHit_out, dirShadow);
-        vec3 colorShadow = generateShadows(shadow, 12);
+        vec3 colorShadow = generateShadows(shadow, 10);
         if (colorShadow.r > 0.0) colorOut = vec4(colorShadow,1.0); 
 
     }
@@ -345,7 +302,7 @@ vec4 secondReflection(vec3 origin, vec3 direction, vec3 norm, Light light) {
             //Se crea la sombra a partir de otro rayo
             vec3 dirShadow = normalize(light.position - posHit_out); 
             Ray shadow = Ray(posHit_out, dirShadow);
-            vec3 colorShadow = generateShadows(shadow, i+9);
+            vec3 colorShadow = generateShadows(shadow, i+7);
             if (colorShadow.r > 0.0) color += vec4(colorShadow,1.0);         
 
         }
@@ -359,14 +316,7 @@ vec4 secondReflection(vec3 origin, vec3 direction, vec3 norm, Light light) {
         if (t >= 0.0 && t < minDistance) {
 
         	minDistance = t;
-            vec3 tNormal = vec3(1.0, 1.0, 1.0);
-            if (i < 2) {
-
-	            if (i%2 == 0) tNormal = getTriangleNormal(triangles[i], triangles[i+1]);
-	            else tNormal = getTriangleNormal(triangles[i-1], triangles[i]);
-	            color = vec4(blinnPhong(light, tNormal, posHit_out, triangles[i].color, ray), 1.0);
-
-        	} else color = vec4(1.0, 0.0, 1.0, 1.0);
+            color = vec4(blinnPhong(light, triangles[i].normal, posHit_out, triangles[i].color, ray), 1.0);
 
             //Se crea la sombra a partir de otro rayo
             vec3 dirShadow = normalize(light.position - posHit_out); 
@@ -410,7 +360,7 @@ vec4 refraction(vec3 origin, vec3 direction, vec3 norm, Light light, bool reboun
                 //Se crea la sombra a partir de otro rayo
                 vec3 dirShadow = normalize(light.position - posHit_out); 
                 Ray shadow = Ray(posHit_out, dirShadow);
-                vec3 colorShadow = generateShadows(shadow, i+9);
+                vec3 colorShadow = generateShadows(shadow, i+7);
                 if (colorShadow.r > 0.0) color += vec4(colorShadow,1.0);
 
             }
@@ -430,7 +380,7 @@ vec4 refraction(vec3 origin, vec3 direction, vec3 norm, Light light, bool reboun
     	//Se crea la sombra a partir de otro rayo
         vec3 dirShadow = normalize(light.position - posHit_out); 
         Ray shadow = Ray(posHit_out, dirShadow);
-        vec3 colorShadow = generateShadows(shadow, 12);
+        vec3 colorShadow = generateShadows(shadow, 10);
         if (colorShadow.r > 0.0) colorOut = vec4(colorShadow,1.0); 
 
     }
@@ -442,14 +392,7 @@ vec4 refraction(vec3 origin, vec3 direction, vec3 norm, Light light, bool reboun
         if (t >= 0.0 && t < minDistance) {
 
         	minDistance = t;
-            vec3 tNormal = vec3(1.0, 1.0, 1.0);
-            if (i < 2) {
-
-	            if (i%2 == 0) tNormal = getTriangleNormal(triangles[i], triangles[i+1]);
-	            else tNormal = getTriangleNormal(triangles[i-1], triangles[i]);
-	            color = vec4(blinnPhong(light, tNormal, posHit_out, triangles[i].color, ray), 1.0);
-
-        	} else color = vec4(1.0, 0.0, 1.0, 1.0);
+	        color = vec4(blinnPhong(light, triangles[i].normal, posHit_out, triangles[i].color, ray), 1.0);
 
             //Se crea la sombra a partir de otro rayo
             vec3 dirShadow = normalize(light.position - posHit_out); 
@@ -491,7 +434,7 @@ vec4 secondRefraction(vec3 origin, vec3 direction, vec3 norm, Light light) {
                 //Se crea la sombra a partir de otro rayo
                 vec3 dirShadow = normalize(light.position - posHit_out); 
                 Ray shadow = Ray(posHit_out, dirShadow);
-                vec3 colorShadow = generateShadows(shadow, i+9);
+                vec3 colorShadow = generateShadows(shadow, i+7);
                 if (colorShadow.r > 0.0) color = vec4(colorShadow,1.0);                    
                 
             }
@@ -511,7 +454,7 @@ vec4 secondRefraction(vec3 origin, vec3 direction, vec3 norm, Light light) {
     	//Se crea la sombra a partir de otro rayo
         vec3 dirShadow = normalize(light.position - posHit_out); 
         Ray shadow = Ray(posHit_out, dirShadow);
-        vec3 colorShadow = generateShadows(shadow, 12);
+        vec3 colorShadow = generateShadows(shadow, 10);
         if (colorShadow.r > 0.0) colorOut = vec4(colorShadow,1.0); 
 
     }
@@ -523,14 +466,7 @@ vec4 secondRefraction(vec3 origin, vec3 direction, vec3 norm, Light light) {
         if (t >= 0.0 && t < minDistance) {
 
         	minDistance = t;
-            vec3 tNormal = vec3(1.0, 1.0, 1.0);
-            if (i < 2) {
-
-	            if (i%2 == 0) tNormal = getTriangleNormal(triangles[i], triangles[i+1]);
-	            else tNormal = getTriangleNormal(triangles[i-1], triangles[i]);
-	            color = vec4(blinnPhong(light, tNormal, posHit_out, triangles[i].color, ray), 1.0);
-
-        	} else color = vec4(1.0, 0.0, 1.0, 1.0);
+	        color = vec4(blinnPhong(light, triangles[i].normal, posHit_out, triangles[i].color, ray), 1.0);
 
             //Se crea la sombra a partir de otro rayo
             vec3 dirShadow = normalize(light.position - posHit_out); 
@@ -631,35 +567,9 @@ vec3 generateShadows(Ray ray, int figura) {
             
         }
 
-    }
-
-    if (figura != 7) { //Triangulo 7 (Piramide)
-
-        t = intersectRayTriangle(triangles[6], ray, posHit_out);
-        if (t >= 0.0 && t < minDistance) {
-
-            color *= 0.2;
-            hitFound = true;
-            minDistance = t;
-            
-        }
-
-    }
-
-    if (figura != 8) { //Triangulo 8 (Piramide)
-
-        t = intersectRayTriangle(triangles[7], ray, posHit_out);
-        if (t >= 0.0 && t < minDistance) {
-
-            color *= 0.2;
-            hitFound = true;
-            minDistance = t;
-            
-        }
-
     }*/
 
-    if (figura != 9) { //Esfera 1
+    if (figura != 7) { //Esfera 1
 
         t = intersectRaySphere(ray,spheres[0],posHit_out,normal);
         if (t != 0.0 && t < minDistance) {
@@ -672,7 +582,7 @@ vec3 generateShadows(Ray ray, int figura) {
 
     }
 
-    if (figura != 10) { //Esfera 2
+    if (figura != 8) { //Esfera 2
 
         t = intersectRaySphere(ray,spheres[1],posHit_out,normal);
         if (t != 0.0 && t < minDistance) {
@@ -685,7 +595,7 @@ vec3 generateShadows(Ray ray, int figura) {
 
     }
 
-    if (figura != 11) { //Esfera 3
+    if (figura != 9) { //Esfera 3
 
         t = intersectRaySphere(ray,spheres[2],posHit_out,normal);
         if (t != 0.0 && t < minDistance) {
@@ -698,7 +608,7 @@ vec3 generateShadows(Ray ray, int figura) {
 
     }
 
-    if (figura != 12) { //Caja
+    if (figura != 10) { //Caja
 
         t = interesectRayBox(ray.origin,ray.direction,box.min, box.max, posHit_out);
         if (t >= 0.0 && t < minDistance) {
@@ -732,46 +642,58 @@ void main() {
 		ray.direction = normalize(point - viewPos);
 
 		//Se arma el piso invisible
-        triangles[0] = Triangle(vec3(-118.89-180.0, -2.0, -52.25), vec3(-117.34-180.0, -2.0, 37.82), vec3(15.72+180.0, -2.0, -47.43), vec4(0.37, 0.34, 0.29, 0.0));
-        triangles[1] = Triangle(vec3(16.89+180.0, -2.0, 40.70), vec3(-117.34-180.0, -2.0, 37.82), vec3(15.72+180.0, -2.0, -47.43), vec4(0.37, 0.34, 0.29, 0.0));
+        triangles[0] = Triangle(vec3(-298.89, -2.0, -52.25), vec3(-297.34, -2.0, 37.82), vec3(195.72, -2.0, -47.43), vec3(0.0,44119.25635,0.0), vec4(0.37, 0.34, 0.29, 0.0));
+        triangles[1] = Triangle(vec3(196.89, -2.0, 40.70), vec3(-298.89, -2.0, 37.82), vec3(195.72, -2.0, -47.43), vec3(0.0,44119.25635,0.0), vec4(0.37, 0.34, 0.29, 0.0));
 
         //Piramide comentada
+        /*
         //Se arma una piramide
-        /*vec3 p0 = vec3(-5.0, -1.9999, 15.0);
-		vec3 p1 = vec3(5.0, -1.9999, 15.0);
-		vec3 p2 = vec3(5.0, -1.9999, 5.0);
-		vec3 p3 = vec3(-5.0, -1.9999, 5.0);
-		vec3 p4 = vec3(0.0, 9.0, 10.0);
 
-		triangles[2] = Triangle(p0, p1, p4, vec4(0.0, 0.5, 0.0, 1.0));
-		triangles[3] = Triangle(p1, p2, p4, vec4(0.0, 0.5, 0.0, 1.0));
-		triangles[4] = Triangle(p2, p3, p4, vec4(0.0, 0.5, 0.0, 1.0));
-		triangles[5] = Triangle(p3, p0, p4, vec4(0.0, 0.5, 0.0, 1.0));
-		triangles[6] = Triangle(p0, p2, p1, vec4(0.0, 0.5, 0.0, 1.0));
-	 	triangles[7] = Triangle(p0, p3, p2, vec4(0.0, 0.5, 0.0, 1.0));
+        //Vertices de la piramide
+        vec3 p1 = vec3(-0.288675,-0.408248,-0.50) * 30.0;
+		vec3 p2 = vec3(-0.288675,-0.408248,0.50) * 30.0;
+		vec3 p3 = vec3(0.577350,-0.408248,0.00) * 30.0;
+		vec3 p4 = vec3(0.00,0.408248,0.00) * 30.0;
+
+		//Normales de la piramide
+		vec3 n1 = vec3(0.00, -30.00, -0.00);
+		vec3 n2 = vec3(0.00, -30.00, -0.00);
+		vec3 n3 = vec3(0.00, -30.00, -0.00);
+		vec3 n4 = vec3(-28.28427, 9.99999, 0.00);
+		vec3 n5 = vec3(-28.28427, 9.99999, 0.00);
+		vec3 n6 = vec3(-28.28427, 9.99999, 0.00);
+		vec3 n7 = vec3(14.14215,9.99999, 24.49491);
+		vec3 n8 = vec3(14.14215, 9.99999, 24.49491);
+		vec3 n9 = vec3(14.14215, 9.99999, 24.49491);
+		vec3 n10 = vec3(14.14215, 9.99999, -24.49491);
+		vec3 n11 = vec3(14.14215, 9.99999, -24.49491);
+		vec3 n12 = vec3(14.14215, 9.99999, -24.49491);
+
+		triangles[2] = Triangle(p1, p3, p2, (n1 + n2 + n3) / 3.0, vec4(0.0, 0.5, 0.0, 1.0));
+		triangles[3] = Triangle(p1, p2, p4, (n4 + n5 + n6) / 3.0, vec4(0.0, 0.5, 0.0, 1.0));
+		triangles[4] = Triangle(p2, p3, p4, (n7 + n8 + n9) / 3.0, vec4(0.0, 0.5, 0.0, 1.0));
+		triangles[5] = Triangle(p3, p1, p4, (n10 + n11 + n12) / 3.0, vec4(0.0, 0.5, 0.0, 1.0));
 
 	 	//Transformaciones de la piramide
         for (int i = 2; i < cantTriangles; i++) { 
 
-        	//Escalando la piramide
-        	triangles[i].v1 *= 2.40;
-        	triangles[i].v2 *= 2.40;
-        	triangles[i].v3 *= 2.40;
+        	//Desplazamiento de la piramide en Z
+        	triangles[i].v1.z += 20.0;
+        	triangles[i].v2.z += 20.0;
+        	triangles[i].v3.z += 20.0;
+        	triangles[i].normal.z += 20.0;
 
         	//Desplazamiento de la piramide en X
-        	triangles[i].v1.x += -65.0;
-        	triangles[i].v2.x += -65.0;
-        	triangles[i].v3.x += -65.0;
+        	triangles[i].v1.x += -37.50;
+        	triangles[i].v2.x += -37.50;
+        	triangles[i].v3.x += -37.50;
+        	triangles[i].normal.x += -37.50;
 
-        	//Desplazamiento de la piramide en Z
-        	triangles[i].v1.z += -7.50;
-        	triangles[i].v2.z += -7.50;
-        	triangles[i].v3.z += -7.50;
-
-        	//Ajustando posicion en Y
-        	if (triangles[i].v1.y < 0.0) triangles[i].v1.y = -1.9999;
-        	if (triangles[i].v2.y < 0.0) triangles[i].v2.y = -1.9999;
-        	if (triangles[i].v3.y < 0.0) triangles[i].v3.y = -1.9999;
+        	//Desplazamiento de la piramide en Y
+        	triangles[i].v1.y += 10.25;
+        	triangles[i].v2.y += 10.25;
+        	triangles[i].v3.y += 10.25;
+        	triangles[i].normal.y += 10.25;
 
         }*/
 
@@ -797,18 +719,10 @@ void main() {
 
             	minDistance = t;
                 hitFound = true;
-                vec3 tNormal = vec3(1.0, 1.0, 1.0);
-
-                if (i < 2) {
-
-		            if (i%2 == 0) tNormal = getTriangleNormal(triangles[i], triangles[i+1]);
-		            else tNormal = getTriangleNormal(triangles[i-1], triangles[i]);
-
-	        	} else tNormal = getTriangleNormal2(triangles[i]);
 
                 //Se aplica Blinn-Phong a los triangulos que no corresponden al piso
-                if (i>=2) colorOut = vec4(blinnPhong(light, tNormal, posHit_out, triangles[i].color, ray), 1.0);
-                else colorOut = vec4(0.0, 0.0, 0.0, 0.0); 	//El piso sera invisible por el alpha = 0.0
+                if (i>=2) colorOut = vec4(blinnPhong(light, triangles[i].normal, posHit_out, triangles[i].color, ray), 1.0);
+                else colorOut = vec4(0.0, 0.0, 0.0, 0.0);	//El piso sera invisible por el alpha = 0.0
                 
                 //Se crea la sombra a partir de otro rayo
                 vec3 dirShadow = normalize(light.position - posHit_out); 
@@ -832,7 +746,7 @@ void main() {
 	    	//Se crea la sombra a partir de otro rayo
             vec3 dirShadow = normalize(light.position - posHit_out); 
             Ray shadow = Ray(posHit_out, dirShadow);
-            vec3 colorShadow = generateShadows(shadow, 12);
+            vec3 colorShadow = generateShadows(shadow, 10);
             if (colorShadow.r > 0.0) colorOut = vec4(colorShadow,1.0);            
 
 	    }
@@ -861,7 +775,7 @@ void main() {
                 //Se crea la sombra a partir de otro rayo
                 vec3 dirShadow = normalize(light.position - posHit_out); 
                 Ray shadow = Ray(posHit_out, dirShadow);
-                vec3 colorShadow = generateShadows(shadow, i+9);
+                vec3 colorShadow = generateShadows(shadow, i+7);
                 if (colorShadow.r > 0.0) colorOut = vec4(colorShadow,1.0);
 
             }

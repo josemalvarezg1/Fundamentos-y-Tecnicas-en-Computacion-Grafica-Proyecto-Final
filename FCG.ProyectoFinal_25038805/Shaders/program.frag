@@ -15,6 +15,7 @@ uniform int width;
 uniform int height;
 uniform float timeRebound;
 uniform float timeRoundabout;
+uniform float refractValue;
 
 in vec2 TexCoords;
 in vec3 lightPosfrag;
@@ -334,7 +335,7 @@ vec4 secondReflection(vec3 origin, vec3 direction, vec3 norm, Light light) {
 
 vec4 refraction(vec3 origin, vec3 direction, vec3 norm, Light light, bool rebound) {
 
-    vec3 newDir = refract(direction, normalize(norm), 0.90);
+    vec3 newDir = refract(direction, normalize(norm), refractValue);
     Ray ray = Ray(origin, newDir);
     float minDistance = 1000000.0;
     vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
@@ -410,7 +411,7 @@ vec4 refraction(vec3 origin, vec3 direction, vec3 norm, Light light, bool reboun
 
 vec4 secondRefraction(vec3 origin, vec3 direction, vec3 norm, Light light) {
 
-    vec3 newDir = refract(direction, normalize(norm), 0.90);
+    vec3 newDir = refract(direction, normalize(norm), refractValue);
     Ray ray = Ray(origin, newDir);
     float minDistance = 1000000.0;
     vec4 color = vec4(0.0, 0.0, 0.0, 1.0);

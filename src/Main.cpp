@@ -8,7 +8,7 @@ bool firstMouse = true, activateCamera = false, flyMode = false, rebound = true,
 CGLSLProgram glslRayProgram; //Programa de shaders del ray tracing
 TwBar *menuTW;
 //Posición de la luz
-float ejeXL = -73.5, ejeYL = 120.0, ejeZL = 1.0, scaleT = 20.2, timeRebound = 0.0f, timeRoundabout = 0.0f;
+float ejeXL = -73.5, ejeYL = 120.0, ejeZL = 1.0, scaleT = 20.2, timeRebound = 0.0f, timeRoundabout = 0.0f, refractValue = 0.95f;
 
 //Reshape de pantalla
 void reshape(GLFWwindow* window, int w, int h) {
@@ -62,6 +62,7 @@ bool initGlew() {
 		glslRayProgram.addUniform("cameraRight");
 		glslRayProgram.addUniform("timeRoundabout");
 		glslRayProgram.addUniform("timeRebound");
+		glslRayProgram.addUniform("refractValue");
 
 		glslRayProgram.disable();
 
@@ -117,6 +118,8 @@ void initAntTweakBar() {
 
 	TwAddVarCB(menuTW, "toggleRoundabout", TW_TYPE_BOOL32, setRoundabout, getRoundabout, NULL, " label='Giro'");
 	TwAddVarCB(menuTW, "toggleRebound", TW_TYPE_BOOL32, setRebound, getRebound, NULL, " label='Rebote'");
+	TwAddVarRW(menuTW, "refractValue", TW_TYPE_FLOAT, &refractValue, "min=0.01 max=1.0 step=0.01 label='Factor de Refracción'");
+
 	TwAddButton(menuTW, "exit", exit, NULL, " label='Salir' key=Esc");
 
 }
@@ -261,6 +264,7 @@ int main() {
 		glUniform3f(glslRayProgram.getLocation("cameraRight"), camera.Right[0], camera.Right[1], camera.Right[2]);
 		glUniform1f(glslRayProgram.getLocation("timeRoundabout"), timeRoundabout);
 		glUniform1f(glslRayProgram.getLocation("timeRebound"), timeRebound);
+		glUniform1f(glslRayProgram.getLocation("refractValue"), refractValue);
 
 		sponzaModel.Draw();
 
@@ -287,6 +291,7 @@ int main() {
 		glUniform3f(glslRayProgram.getLocation("cameraRight"), camera.Right[0], camera.Right[1], camera.Right[2]);
 		glUniform1f(glslRayProgram.getLocation("timeRoundabout"), timeRoundabout);
 		glUniform1f(glslRayProgram.getLocation("timeRebound"), timeRebound);
+		glUniform1f(glslRayProgram.getLocation("refractValue"), refractValue);
 
 		quadModel.Draw();
 

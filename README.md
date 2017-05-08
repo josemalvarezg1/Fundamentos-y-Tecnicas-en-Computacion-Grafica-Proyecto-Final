@@ -26,7 +26,11 @@ La escena de este proyecto está compuesta por el modelo Sponza de Crytek junto 
   - 1 caja.
   - (*) 1 pirámide.
 
-Todos los objetos anteriormente mencionados poseen sombras. El giro de la esfera reflectiva y el rebote de la esfera sin efectos pueden ser activados o desactivados desde el menú de AntTweakBar.
+Todos los objetos anteriormente mencionados poseen sombras. 
+
+El giro de la esfera reflectiva y el rebote de la esfera sin efectos pueden ser activados o desactivados desde el menú de AntTweakBar.
+
+El valor de refracción puede ser ajustado desde el menú de AntTweakBar.
 
 Para desplazarse en la escena se pueden utilizar las teclas W, A, S, D y el ratón para mover la cámara. Esta última puede ser activada o desactivada presionando la tecla T. El modo "vuelo" puede ser activado o desactivado presionando la tecla F.
 

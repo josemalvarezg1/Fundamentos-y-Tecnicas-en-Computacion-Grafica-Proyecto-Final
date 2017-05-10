@@ -809,7 +809,7 @@ void main() {
 		specular = vec4(spec,spec,spec,1.0);
 
 		colorOut = diffuse + specular;
-		if (textured) colorOut *= vec4(texture(texture, TexCoords));
+		if (textured) colorOut *= vec4(texture2D(texture, TexCoords));
 
    	}   	
 
